@@ -5,10 +5,12 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 import com.example.janetdo.toomapp.Helper.CloudantService;
 import com.example.janetdo.toomapp.Helper.FirebaseInstanceIDService;
 import com.example.janetdo.toomapp.Helper.Incident;
+import com.example.janetdo.toomapp.Helper.Properties;
 import com.example.janetdo.toomapp.Helper.WorkerAdapter;
 import com.example.janetdo.toomapp.Helper.ListHolder;
 import com.example.janetdo.toomapp.Helper.Problem;
@@ -62,10 +65,10 @@ public class WorkerActivity extends AppCompatActivity {
     private CheckBox state;
     private CheckBox timestamp;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle parameters = getIntent().getExtras();
         cloudantService = new CloudantService();
         notificationService = new FirebaseInstanceIDService();
@@ -74,7 +77,6 @@ public class WorkerActivity extends AppCompatActivity {
         activeNetwork = cm.getActiveNetworkInfo();
         problems = new ArrayList<>();
         incidents = new ArrayList<>();
-
 
         if (parameters != null && parameters.containsKey("layout")) {
             setContentView(parameters.getInt("layout"));
@@ -125,7 +127,26 @@ public class WorkerActivity extends AppCompatActivity {
         return allTypes;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        FirebaseMessaging.getInstance().subscribeToTopic("client");
+        FirebaseMessaging.getInstance().unsubscribeFromTopic("worker");
+        Properties.getInstance().setAdmin(false);
+        super.onBackPressed();
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                FirebaseMessaging.getInstance().subscribeToTopic("client");
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("worker");
+                Properties.getInstance().setAdmin(false);
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private void initListener() {
         EditText comment = findViewById(R.id.comment);
         comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
