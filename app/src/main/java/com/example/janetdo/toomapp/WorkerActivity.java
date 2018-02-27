@@ -47,7 +47,7 @@ import static java.lang.Thread.sleep;
 public class WorkerActivity extends AppCompatActivity {
     private static String TABLE_PROBLEM = "problems";
     private CloudantService cloudantService;
-    private ProblemType problemType;
+    private ProblemType problemType = ProblemType.GENERAL;
     private RelativeLayout relativeLayout;
     private FirebaseInstanceIDService notificationService;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -285,7 +285,7 @@ public class WorkerActivity extends AppCompatActivity {
         Problem newProblem = new Problem(problemType, content);
         Toast.makeText(getApplicationContext(), "Ihre Nachricht wurde versandt.",
                 Toast.LENGTH_LONG).show();
-        //cloudantService.writeToTable(TABLE_PROBLEM, newProblem);
+        cloudantService.writeToTable(TABLE_PROBLEM, newProblem);
         try {
             wait(1000);
         } catch (Exception e) {
