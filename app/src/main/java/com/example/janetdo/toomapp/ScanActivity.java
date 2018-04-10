@@ -78,7 +78,7 @@ public class ScanActivity extends Activity implements ZXingScannerView.ResultHan
         price.setTextColor(getResources().getColor(R.color.black));
         price.setText(Double.toString(item.getPrice()) + " €");
         itemPic = popupView.findViewById(R.id.itemPic);
-        itemPic.setBackground(setItemPic(item));
+        itemPic.setBackground(item.getItemPic());
 
         desc.setText(item.getDescription());
         name.setText(item.getName());
@@ -96,43 +96,5 @@ public class ScanActivity extends Activity implements ZXingScannerView.ResultHan
         });
     }
 
-    private Drawable setItemPic(Item item) {
-        ImageView view = new ImageView(this);
-        Drawable drawable = null;
-        switch (item.getCategory().toLowerCase()) {
-            case "bodenbelag":
-                drawable = getDrawable(R.drawable.bodenbelag);
-                break;
-            case "pflanzen":
-                drawable = getDrawable(R.drawable.pflanzen);
-                break;
-            case "lacke":
-                drawable = getDrawable(R.drawable.category_paint);
-                break;
-            case "garten":
-                drawable = getDrawable(R.drawable.garten);
-                break;
-            case "zement":
-                drawable = getDrawable(R.drawable.zement);
-                break;
-            case "bauzubehör":
-                drawable = getDrawable(R.drawable.bauzubehoer);
-                break;
-            case "styroporleisten":
-                drawable = getDrawable(R.drawable.styroporleisten);
-                break;
-            case "baustoffe":
-                drawable = getDrawable(R.drawable.baustoffe);
-                break;
-            case "dämmstoffe":
-                drawable = getDrawable(R.drawable.daemmstoffe);
-                break;
-            default:
-                drawable = getDrawable(R.drawable.sonstiges);
 
-
-        }
-        return drawable;
-
-    }
 }

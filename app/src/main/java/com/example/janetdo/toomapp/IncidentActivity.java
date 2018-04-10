@@ -22,6 +22,8 @@ import java.util.List;
 public class IncidentActivity extends AppCompatActivity {
     private CloudantService cloudantService;
     private FirebaseInstanceIDService notificationService;
+    private static String TOAST_FOR_CLIENT = "Der Mangel wurde gemeldet. Vielen Dank.";
+    private static String TOAST_FOR_WORKER = "Ein Mangel wurde gemeldet.";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,22 +39,18 @@ public class IncidentActivity extends AppCompatActivity {
         EditText comment = findViewById(R.id.incidentTextField);
         comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(View view, boolean hasFocus) {
                 if (!hasFocus) {
-                    hideKeyboard(v);
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }
         });
     }
 
-    private void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     public void sendIncident(View view) {
         EditText incidentTextField = findViewById(R.id.incidentTextField);
-        Toast.makeText(getApplicationContext(), "Der Mangel wurde gemeldet. Vielen Dank.",
+        Toast.makeText(getApplicationContext(), TOAST_FOR_CLIENT,
                 Toast.LENGTH_LONG).show();
         Incident incident = new Incident(incidentTextField.getText().toString().trim());
         cloudantService.writeToTable("flaws", incident);
@@ -62,7 +60,7 @@ public class IncidentActivity extends AppCompatActivity {
         }
 
         try {
-            notificationService.sendPushNotification("Ein Mangel wurde gemeldet.", "worker");
+            notificationService.sendPushNotification(TOAST_FOR_WORKER, "worker");
         } catch (Exception e) {
             System.out.println("Firebase Message Error: Could not send incident push notification!");
         }

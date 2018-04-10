@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private NetworkInfo activeNetwork;
     public static Context context;
 
-    private Properties props;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,12 +71,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         initViewElements();
         setDefaultView();
-        // checkCurrentState();
-        createItemCatalog();
         createSalesItemCatalog();
 
-        FirebaseMessaging.getInstance().subscribeToTopic("client");
-        FirebaseMessaging.getInstance().unsubscribeFromTopic("worker");
         Properties.getInstance().setAdmin(false);
 
 
@@ -117,12 +111,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    private void checkCurrentState() {
-        if (!User.isUser()) {
-            workerSwitch.setChecked(true);
-        }
-    }
-
     private void initViewElements() {
         workerSwitch = (Switch) findViewById(R.id.switch1);
         workerSwitch.setChecked(false);
@@ -133,14 +121,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         btnProblem = (Button) findViewById(R.id.btnProblem);
         searchList = findViewById(R.id.searchList);
         searchList.setVisibility(View.GONE);
-        initPressListener(btnWorker);
-        initPressListener(btnProblem);
-        initPressListener(btnMap);
-        initPressListener(btnScan);
+        setButtonEffects(btnWorker);
+        setButtonEffects(btnProblem);
+        setButtonEffects(btnMap);
+        setButtonEffects(btnScan);
         initSearchListener();
     }
 
-    private void initPressListener(Button button) {
+    private void setButtonEffects(Button button) {
         button.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View v, MotionEvent event) {
@@ -172,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("client");
                     Properties.getInstance().setAdmin(true);
                     showAllProblems(buttonView);
-                    System.out.println("WORKER VIEW");
                 } else {
                     FirebaseMessaging.getInstance().subscribeToTopic("client");
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("worker");
@@ -239,9 +226,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public void showTableSearch(String s) {
         String searchVal = s.trim().toLowerCase();
-        searchResults = new ArrayList<>();
-        searchResults = catalog.searchItemString(searchVal);
-        String[] stuff = new String[searchResults.size()];
+        String[] stuff = new String[catalog.searchItemString(searchVal).size()];
         ListView lView = (ListView) findViewById(R.id.searchList);
         SearchAdapter customizedAdapter;
         customizedAdapter = new SearchAdapter(MainActivity.this, searchResults, stuff);
@@ -252,7 +237,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 showPopupWindow(searchResults.get(i), i);
                 View rowView = adapterView.getAdapter().getView(i, view, null);
-                System.out.println("start");
 
             }
         });
@@ -263,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Position: ");
                 Intent intent = new Intent(MainActivity.getContext(), MapActivity.class);
                 ListHolder holder = new ListHolder();
                 holder.initItemList(salesCatalog);
@@ -311,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         price.setTextColor(getResources().getColor(R.color.black));
 
         itemPic = popupView.findViewById(R.id.itemPic);
-        itemPic.setBackground(setItemPic(item));
+        itemPic.setBackground(item.getItemPic());
 
         desc.setText(item.getDescription());
         name.setText(item.getName());
@@ -330,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         });
     }
 
-
     @Override
     public boolean onQueryTextSubmit(String s) {
         showTableSearch(s);
@@ -345,13 +327,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         if (isSearch) {
             visible = View.GONE;
         }
-        //TODO: correct logic?
         btnWorker.setVisibility(visible);
         btnProblem.setVisibility(visible);
         btnScan.setVisibility(visible);
     }
 
-    @Override
     public boolean onQueryTextChange(String s) {
         return false;
     }
@@ -402,48 +382,5 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         intent.putExtra("problemsList", holder);
         startActivity(intent);
     }
-
-    private Drawable setItemPic(Item item) {
-        Drawable drawable = null;
-        switch (item.getCategory().toLowerCase()) {
-            case "bodenbelag":
-                drawable = getDrawable(R.drawable.bodenbelag);
-                break;
-            case "pflanzen":
-                drawable = getDrawable(R.drawable.pflanzen);
-                break;
-            case "lacke":
-                drawable = getDrawable(R.drawable.category_paint);
-                break;
-            case "garten":
-                drawable = getDrawable(R.drawable.garten);
-                break;
-            case "zement":
-                drawable = getDrawable(R.drawable.zement);
-                break;
-            case "bauzubehoer":
-                drawable = getDrawable(R.drawable.bauzubehoer);
-                break;
-            case "styroporleisten":
-                drawable = getDrawable(R.drawable.styroporleisten);
-                break;
-            case "baustoffe":
-                drawable = getDrawable(R.drawable.baustoffe);
-                break;
-            case "daemmungen":
-                drawable = getDrawable(R.drawable.daemmstoffe);
-                break;
-            case "leuchten":
-                drawable = getDrawable(R.drawable.lampen);
-                break;
-            default:
-                drawable = getDrawable(R.drawable.sonstiges);
-
-
-        }
-        return drawable;
-
-    }
-
 
 }

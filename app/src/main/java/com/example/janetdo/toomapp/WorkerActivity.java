@@ -134,6 +134,7 @@ public class WorkerActivity extends AppCompatActivity {
         Properties.getInstance().setAdmin(false);
         super.onBackPressed();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -147,6 +148,7 @@ public class WorkerActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void initListener() {
         EditText comment = findViewById(R.id.comment);
         comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -181,13 +183,13 @@ public class WorkerActivity extends AppCompatActivity {
     }
 
 
-
     private void showPopupWindow(Type type, int position) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.information_window, null);
         relativeLayout = findViewById(R.id.relativeLayout);
         Button acceptBtn = popupView.findViewById(R.id.accept);
         Button deleteBtn = popupView.findViewById(R.id.delete);
+
         final PopupWindow popupWindow = new PopupWindow(popupView, 1000, 400, true);
         popupWindow.showAtLocation(relativeLayout, Gravity.CENTER, 0, 0);
 
@@ -202,7 +204,7 @@ public class WorkerActivity extends AppCompatActivity {
             problemType.setText("Mängel");
 
         }
-        aisle.setText("Gang " + Integer.toString(type.getAisle()));
+        aisle.setText("Regal " + Integer.toString(type.getAisle()));
         desc.setText(type.getComment());
         problemType.setTextSize(35);
         desc.setTextSize(25);
@@ -254,7 +256,6 @@ public class WorkerActivity extends AppCompatActivity {
         }
         type.setState(resultState);
 
-
         initView();
 
     }
@@ -278,6 +279,24 @@ public class WorkerActivity extends AppCompatActivity {
         EditText text = findViewById(R.id.comment);
         boolean checked = ((RadioButton) view).isChecked();
         text.setText("Bitte beschreiben Sie Ihren Wunsch.");
+
+        if (checked) {
+            switch (view.getId()) {
+                case R.id.generalHelp:
+                    problemType = ProblemType.GENERAL;
+                    text.setVisibility(View.GONE);
+                    break;
+                case R.id.specificHelp:
+                    problemType = ProblemType.SPECIFIC;
+                    text.setVisibility(View.GONE);
+                    break;
+                case R.id.other:
+                    problemType = ProblemType.OTHER;
+                    text.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+        /*
         switch (view.getId()) {
             case R.id.generalHelp:
                 if (checked)
@@ -295,6 +314,7 @@ public class WorkerActivity extends AppCompatActivity {
                 text.setVisibility(View.VISIBLE);
                 break;
         }
+        */
     }
 
     public void sendProblem(View view) {

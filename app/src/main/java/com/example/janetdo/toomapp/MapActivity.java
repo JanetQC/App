@@ -148,7 +148,7 @@ public class MapActivity extends AppCompatActivity {
         salesPrice.setText(String.format("%.2f", item.getSalesPrice()) + " €");
         price.setPaintFlags(price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         itemPic = popupView.findViewById(R.id.itemPic);
-        itemPic.setBackground(setItemPic(item));
+        itemPic.setBackground(item.getItemPic());
 
         ImageView navi = popupView.findViewById(R.id.navi);
      //   setNavigationOnClickListener(navi, id);
@@ -184,47 +184,6 @@ public class MapActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
-    private Drawable setItemPic(Item item) {
-        Drawable drawable = null;
-        switch (item.getCategory().toLowerCase()) {
-            case "bodenbelag":
-                drawable = getDrawable(R.drawable.bodenbelag);
-                break;
-            case "pflanzen":
-                drawable = getDrawable(R.drawable.pflanzen);
-                break;
-            case "lacke":
-                drawable = getDrawable(R.drawable.category_paint);
-                break;
-            case "garten":
-                drawable = getDrawable(R.drawable.garten);
-                break;
-            case "zement":
-                drawable = getDrawable(R.drawable.zement);
-                break;
-            case "bauzubehoer":
-                drawable = getDrawable(R.drawable.bauzubehoer);
-                break;
-            case "styroporleisten":
-                drawable = getDrawable(R.drawable.styroporleisten);
-                break;
-            case "baustoffe":
-                drawable = getDrawable(R.drawable.baustoffe);
-                break;
-            case "daemmungen":
-                drawable = getDrawable(R.drawable.daemmstoffe);
-                break;
-            case "leuchten":
-                drawable = getDrawable(R.drawable.lampen);
-                break;
-            default:
-                drawable = getDrawable(R.drawable.sonstiges);
-
-
-        }
-        return drawable;
-
     }
 
     public void setNavigationOnClickListener(ImageView view, int position) {

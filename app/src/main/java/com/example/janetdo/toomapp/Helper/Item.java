@@ -1,12 +1,17 @@
 package com.example.janetdo.toomapp.Helper;
 
+import android.app.Activity;
+import android.graphics.drawable.Drawable;
+
+import com.example.janetdo.toomapp.R;
+
 import java.io.Serializable;
 
 /**
  * Created by janetdo on 26.12.17.
  */
 
-public class Item implements Serializable {
+public class Item  extends Activity implements Serializable  {
     private String id;
     private String name;
     private String description;
@@ -78,5 +83,47 @@ public class Item implements Serializable {
                 ", aisle=" + aisle +
                 ", scanCode='" + scanCode + '\'' +
                 '}';
+    }
+
+    public Drawable getItemPic() {
+        Drawable drawable = null;
+        switch (this.getCategory().toLowerCase()) {
+            case "bodenbelag":
+                drawable = getDrawable(R.drawable.bodenbelag);
+                break;
+            case "pflanzen":
+                drawable = getDrawable(R.drawable.pflanzen);
+                break;
+            case "lacke":
+                drawable = getDrawable(R.drawable.category_paint);
+                break;
+            case "garten":
+                drawable = getDrawable(R.drawable.garten);
+                break;
+            case "zement":
+                drawable = getDrawable(R.drawable.zement);
+                break;
+            case "bauzubehoer":
+                drawable = getDrawable(R.drawable.bauzubehoer);
+                break;
+            case "styroporleisten":
+                drawable = getDrawable(R.drawable.styroporleisten);
+                break;
+            case "baustoffe":
+                drawable = getDrawable(R.drawable.baustoffe);
+                break;
+            case "daemmungen":
+                drawable = getDrawable(R.drawable.daemmstoffe);
+                break;
+            case "leuchten":
+                drawable = getDrawable(R.drawable.lampen);
+                break;
+            default:
+                drawable = getDrawable(R.drawable.sonstiges);
+
+
+        }
+        return drawable;
+
     }
 }

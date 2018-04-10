@@ -7,3 +7,4 @@ package com.example.janetdo.toomapp.Helper;
 public enum State {
     NEW, IN_PROGRESS, DONE
 }
+

@@ -47,7 +47,7 @@ public class Pathfinder {
         wholeMap.put("bad_dusche_1", coord2);
         wholeMap.put("bad_dusche_2", coord3);
 
-        wholeMap.put("leuchten_1", coord4);
+        wholeMap.put("leuchten", coord4);
         wholeMap.put("leuchten_2", coord5);
         wholeMap.put("lacke_2", coord6);
 
